@@ -1,0 +1,31 @@
+.header {
+    margin: auto;
+    height: 50vh;
+    width: 90vw;
+    font-weight: 900;
+    font-size: 3.5rem;
+    padding-top: 250px;
+    letter-spacing: 0.1em;
+    text-align: center;
+    text-shadow: 3px 3px 10px #333;
+}
+
+.mat-raised-button {
+    background: rgba(255,255,255,0.6);
+    border: 2px solid #fff;
+    border: 2px solid rgba(255,193,7,0.4);
+    font-weight: 700;
+    font-family: 'Muli', sans-serif;
+    margin-right: 10px;
+}
+
+.mat-raised-button:hover {
+    background: rgba(255,193,7,0.7);
+    border: 2px solid #ffc107;
+}
+
+.block {
+    width: 100vw;
+    min-height: 800px;
+    background-color: aqua;
+}

@@ -1,0 +1,9 @@
+.fixed-bg {
+    background-image: url('../assets/images/compass-background.jpg');
+    min-height: 100vh;
+    background-attachment: fixed;
+    background-position: 70% 70%;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+

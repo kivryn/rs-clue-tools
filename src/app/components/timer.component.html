@@ -1,0 +1,32 @@
+<div class="timer-area" fxLayout="column" fxLayoutAlign="flex-start center" fxLayoutGap="4vw" >
+    <mat-card fxLayout="column" fxLayoutAlign="flex-start center" fxLayoutGap="4vw" class="center-card">
+        <div><mat-button-toggle-group class="mul-bold" (click)="changeType()" [(value)]="type" #group="matButtonToggleGroup">
+            <mat-button-toggle value="Easy">Easy</mat-button-toggle>
+            <mat-button-toggle value="Medium">Medium</mat-button-toggle>
+            <mat-button-toggle value="Hard">Hard</mat-button-toggle>
+            <mat-button-toggle value="Elite">Elite</mat-button-toggle>
+            <mat-button-toggle value="Master">Master</mat-button-toggle>
+          </mat-button-toggle-group></div>
+        <div class="mul-bold large">{{ type }} Clues</div>
+        <div class="timer">{{ticks | minuteSeconds }}</div>
+        <div fxLayout="row column" fxLayoutAlign="center" fxLayoutGap="3vw">
+            <button mat-raised-button class="mul-bold" (click)="resetTimer()">Reset</button>
+            <button mat-raised-button class="mul-bold" color="warn" (click)="stopTimer()">Stop</button>
+            <button mat-raised-button class="mul-bold" color="accent" (click)="startTimer()">Start</button>
+         </div>
+    </mat-card>
+    <mat-card class="center-card" fxLayout="column" fxLayoutAlign="flex-start center" fxLayoutGap="4vw">
+            <div class="average">{{type}}:<br>{{ average | minuteSeconds }}</div>
+            <div class="mul-bold record" *ngIf="records.length === 0">No Times Yet!</div>
+        <table>
+        <tr *ngFor="let r of records; let i = index">
+            <td class="record mul-bold"> {{ i+1 }}</td>
+            <td class="record mul-bold"> {{ r.time | date:'d-MMM-yyyy HH:mm:ss' }} </td>
+            <td class="record mul-bold"> {{ r.type }}</td>
+            <td class="record mul-bold">{{ r.completeTime | minuteSeconds}}</td>
+            <td><button mat-raised-button class="mul-bold" color="warn" (click)="deleteRecord(r.id)"><mat-icon>delete</mat-icon></button>
+            </td>
+        </tr>
+        </table>
+    </mat-card>
+</div>
