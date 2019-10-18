@@ -9,7 +9,6 @@ branches:
 before_script:
   - npm install -g @angular/cli
 script:
-  - ng lint
   - ng build --prod --base-href=/rs-clue-tools/
 deploy:
   provider: pages
