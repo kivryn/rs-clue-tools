@@ -1,7 +1,9 @@
 import { Component, OnInit} from '@angular/core';
 import { timer, Subscription } from 'rxjs';
-import { ITimeRecord } from '../services/app-db';
-import { DBService } from '../services/d-b.service';
+import { CompleteTime } from '../models/model';
+import { FirestoreService } from '../services/firestore.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-timer',
@@ -12,16 +14,57 @@ export class TimerComponent implements OnInit {
 
   private myTimerSub: Subscription;  
   ticks = 0;
-  type = 'Easy';
+  type = 'Medium';
   clicked = false;
   average = 0;
-  records:ITimeRecord[] = []; //= [{id: 1, time: Date.now(), type: 'Easy', completeTime: 85},{id: 10, time: Date.now(), type: 'Easy', completeTime: 85}];
+  averageSteps = 0;
+  current:CompleteTime = {
+      createTime: 0,
+      type: this.type,
+      steps: 0,
+      lapTime: [],
+      completeTime: 0
+  }
+  records:CompleteTime[] = []; 
 
-  constructor(private db: DBService) {
+  constructor(private db: FirestoreService, private _snackBar: MatSnackBar) {
   }
 
   ngOnInit(){
     this.getRecords();
+  }
+  
+  changeType(){
+    this.getRecords();
+  }
+
+  getRecords() {
+    this.db.getTimes(this.type).subscribe(r => {
+      this.records = r.map(item => {
+        return {
+          id: item.payload.doc.id,
+          ...item.payload.doc.data()
+        } as CompleteTime
+      })
+      console.log(this.records);
+      this.calculateAverage();
+    });
+  }
+
+  calculateAverage() {
+    this.average = 0;
+    this.averageSteps = 0;
+    let cumulative = 0, cumulSteps = 0, count = 0, count2 = 0;
+    for (const t of this.records) {
+      count++;
+      cumulative += t.completeTime;
+      this.average = Math.floor(cumulative/ count);
+      if(t.steps > 0) {
+        count2++;
+        cumulSteps += t.steps;
+        this.averageSteps = Math.floor(cumulSteps/ count2);
+      }
+    }
   }
 
   startTimer() {
@@ -31,49 +74,54 @@ export class TimerComponent implements OnInit {
     this.myTimerSub = ti.subscribe(t => {    
         this.ticks = t;  
     }); 
-  }
 
-  getRecords() {
-    this.db.getTimes(this.type).then( res => {
-      this.records = res;
-      this.calculateAverage();
-    });
-  }
-
-  calculateAverage() {
-    this.average = 0;
-    let cumulative = 0;
-    let count = 0;
-    for (const t of this.records) {
-      count++;
-      cumulative += t.completeTime;
-      this.average = Math.floor(cumulative/ count);
+    this.current = {
+        createTime: 0,
+        type: this.type,
+        steps: 0,
+        lapTime: [],
+        completeTime: 0
     }
   }
 
-  changeType(){
-    this.getRecords();
+  stepTimer() {
+    this.current.lapTime.push(this.ticks);
+    this.current.steps++;
   }
 
   stopTimer() {
     this.myTimerSub.unsubscribe();
     const t = this.ticks
     if (t > 0 && !this.clicked) {
-      this.db.add({time: Date.now(), type: this.type, completeTime: t})
+      if (this.current.steps > 0) { this.stepTimer(); }
+      this.current.createTime = Date.now();
+      this.current.completeTime = t;
+      this.db.createRecord('completeTimes', this.current);
+      this.openSnackBar('Record saved at: '+formatDate(Date.now(), 'shortTime', 'en-US'), 'OK')
     } else {
-      console.log('did not add')
+      console.log('Did not add time - Counter not initialized.')
     }
     this.clicked = true;
     this.getRecords();    
   }
 
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 3000,
+    });
+  }
+
   resetTimer() {
+    this.myTimerSub.unsubscribe(); 
     this.ticks = 0;
+    this.current.steps = 0;
   }
 
   deleteRecord(id) {
-    this.db.remove(id);
-    this.getRecords();
+    console.log(id);
+    this.db.deleteRecord('completeTimes', id).then(()=>{
+      this.getRecords();
+    })
   }
 
   ngOnDestroy() {    

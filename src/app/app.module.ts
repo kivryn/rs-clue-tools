@@ -10,20 +10,27 @@ import { TimerComponent } from './components/timer.component';
 import { DBService } from './services/d-b.service';
 import { MinuteSecondsPipe } from './pipes/minute-seconds.pipe';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { DexieComponent } from './components/dexie.component';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireModule } from 'angularfire2';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
     AppComponent,
     WelcomeComponent,
     TimerComponent,
-    MinuteSecondsPipe
+    MinuteSecondsPipe,
+    DexieComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule
   ],
   providers: [ DBService ],
   bootstrap: [AppComponent]

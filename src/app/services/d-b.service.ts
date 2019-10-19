@@ -1,5 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AppDb, ITimeRecord } from './app-db';
+import Dexie from "dexie";
+import {importDB, exportDB, importInto} from "dexie-export-import";
+import 'dexie-export-import';
+
+export interface TableDump {
+  table: string
+  rows: any[]
+}
 
 @Injectable({
   providedIn: 'root'
@@ -7,9 +15,17 @@ import { AppDb, ITimeRecord } from './app-db';
 export class DBService {
 
     db: any;
+    saved: any;
 
     constructor() {
         this.db = new AppDb();
+    }
+
+    exportDB = async () => {
+      console.log(this.db);
+      const blob = await this.db.export();
+      console.log(JSON.stringify(blob));
+      return blob;
     }
 
     getTimes(type: string) {
