@@ -30,4 +30,20 @@ export class FirestoreService {
   getTimes(type) { 
     return this.fs.collection('completeTimes', ref => ref.where('type', '==', type).orderBy('createTime')).snapshotChanges();
   }
+
+  updateFortunate(id, data) {
+    return this.fs.collection('completeTimes')
+    .doc(id)
+    .update({
+      fortunateComponent: data
+    });
+  }
+
+  updatePage(id, data) {
+    return this.fs.collection('completeTimes')
+    .doc(id)
+    .update({
+      godPage: data
+    });
+  }
 }

@@ -19,14 +19,22 @@
     <mat-card class="center-card" fxLayout="column" fxLayoutAlign="flex-start center" fxLayoutGap="4vw">
             <div class="average">{{ average | minuteSeconds }}
                 <div class="inside mul-bold">Average Steps: {{ averageSteps }}</div>
+                <div class="inside mul-bold">Clues/Hour: {{ cluesph }}</div>
+                <div class="inside mul-bold">Forts/Hour: {{ averageFortsPerHour | number : '1.0' }}</div>
+                <div class="inside mul-bold">Pages/Hour: {{ averagePagesPerHour | number : '1.0' }}</div>
             </div>
             <div class="mul-bold record" *ngIf="records.length === 0">No Times Yet!</div>
         <table>
         <tr *ngFor="let r of records?.slice().reverse() | slice:0:10; let i = index">
-            <td class="record mul-bold"> {{ i+1 }}</td>
-            <td class="record mul-bold"> {{ r.createTime | date:'d-MMM-yyyy HH:mm:ss' }} </td>
+            <td class="record mul-bold"> {{ r.createTime | date:'shortTime' }}</td>
             <td class="record mul-bold"> {{ r.steps }} steps</td>
-            <td class="record mul-bold">{{ r.completeTime | minuteSeconds}}</td>
+            <td class="record mul-bold" >{{ r.completeTime | minuteSeconds}}</td>
+            <td class="record mul-bold" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="2vw">
+                <mat-icon (click)="minusFort(r.id, r.fortunateComponent)" class="click">remove_circle</mat-icon><span> {{ r.fortunateComponent }} forts </span>
+                <mat-icon (click)="addFort(r.id, r.fortunateComponent)" class="click">add_box</mat-icon></td>
+            <td class="record mul-bold" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="2vw">
+                 <mat-icon (click)="minusPage(r.id, r.godPage)"class="click">remove_circle</mat-icon><span>{{ r.godPage }} pages</span>
+                <mat-icon (click)="addPage(r.id, r.godPage)" class="click">add_box</mat-icon></td>
             <td (click)="deleteRecord(r.id)" class="butn"><mat-icon>delete</mat-icon></td>
         </tr>
         </table>

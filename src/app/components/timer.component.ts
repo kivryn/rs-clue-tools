@@ -18,12 +18,17 @@ export class TimerComponent implements OnInit {
   clicked = false;
   average = 0;
   averageSteps = 0;
+  cluesph = 0;
+  averagePagesPerHour = 0;
+  averageFortsPerHour = 0;
   current:CompleteTime = {
       createTime: 0,
       type: this.type,
       steps: 0,
       lapTime: [],
-      completeTime: 0
+      completeTime: 0,
+      fortunateComponent: 0,
+      godPage: 0      
   }
   records:CompleteTime[] = []; 
 
@@ -54,11 +59,17 @@ export class TimerComponent implements OnInit {
   calculateAverage() {
     this.average = 0;
     this.averageSteps = 0;
-    let cumulative = 0, cumulSteps = 0, count = 0, count2 = 0;
+    let cumulative = 0, cumulFort = 0, cumulPage = 0, cumulSteps = 0, count = 0, count2 = 0;
     for (const t of this.records) {
       count++;
       cumulative += t.completeTime;
+      cumulFort += t.fortunateComponent;
+      cumulPage += t.godPage;
       this.average = Math.floor(cumulative/ count);
+      this.cluesph = (60*60)/this.average;
+      this.averageFortsPerHour = cumulFort/count * this.cluesph;
+      this.averagePagesPerHour = cumulPage/count * this.cluesph;
+      
       if(t.steps > 0) {
         count2++;
         cumulSteps += t.steps;
@@ -80,7 +91,9 @@ export class TimerComponent implements OnInit {
         type: this.type,
         steps: 0,
         lapTime: [],
-        completeTime: 0
+        completeTime: 0,
+        fortunateComponent: 0,
+        godPage: 0  
     }
   }
 
@@ -122,6 +135,43 @@ export class TimerComponent implements OnInit {
     this.db.deleteRecord('completeTimes', id).then(()=>{
       this.getRecords();
     })
+  }
+
+  minusFort(id, forts) {
+    if(forts > 0) {
+      this.db.updateFortunate(id, forts-1).then(()=>{
+        this.openSnackBar('Fortunate Count updated to: '+ (forts-1), 'OK');
+        this.getRecords();
+      });
+    } else {
+      this.openSnackBar('Fortunate Count is already 0'!, 'OK')
+    }
+  }
+
+  addFort(id, forts) {
+    this.db.updateFortunate(id, forts+1).then(()=>{
+      this.openSnackBar('Fortunate Count updated to: '+ (forts+1), 'OK');
+      this.getRecords();
+    });
+  }
+
+  minusPage(id, pages) {
+    if(pages > 0) {
+      this.db.updatePage(id, pages-1).then(()=>{
+        this.openSnackBar('God Page Count updated to: '+ (pages-1), 'OK');
+        this.getRecords();
+      });
+    } else {
+      this.openSnackBar('God Page Count is already 0'!, 'OK')
+    }
+  }
+
+  addPage(id, pages) {
+    console.log(pages+1);
+    this.db.updatePage(id, pages+1).then(()=>{
+      this.openSnackBar('God Page Count updated to: '+ (pages+1), 'OK');
+      this.getRecords();
+    });
   }
 
   ngOnDestroy() {    

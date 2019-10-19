@@ -5,4 +5,6 @@ export interface CompleteTime {
     steps: number;
     lapTime: number[];
     completeTime: number;
+    fortunateComponent?: number;
+    godPage?: number;
 }
