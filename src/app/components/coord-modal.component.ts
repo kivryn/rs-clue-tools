@@ -45,7 +45,7 @@ export class CoordModalComponent implements OnInit {
    });
  }
 
-  onSubmit(f) {
+  onSubmit() {
     const v = this.form.value;
     this.addRecord = { id: this.addRecord.id, a: (v.a).toString(), b: v.b, 
       c: (v.c).toString(), d: v.d, type: v.type, teleport: v.teleport,
