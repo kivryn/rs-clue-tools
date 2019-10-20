@@ -13,6 +13,7 @@ import { formatDate } from '@angular/common';
 export class TimerComponent implements OnInit {
 
   private myTimerSub: Subscription;  
+  subscribed = false;
   ticks = 0;
   type = 'Medium';
   clicked = false;
@@ -79,21 +80,24 @@ export class TimerComponent implements OnInit {
   }
 
   startTimer() {
-    this.ticks = 0;
-    this.clicked = false;
-    const ti = timer(0,1000); 
-    this.myTimerSub = ti.subscribe(t => {    
-        this.ticks = t;  
-    }); 
-
-    this.current = {
-        createTime: 0,
-        type: this.type,
-        steps: 0,
-        lapTime: [],
-        completeTime: 0,
-        fortunateComponent: 0,
-        godPage: 0  
+    if (this.subscribed === false) {
+      this.subscribed = true;
+      this.ticks = 0;
+      this.clicked = false;
+      const ti = timer(0,1000); 
+      this.myTimerSub = ti.subscribe(t => {    
+          this.ticks = t;  
+      }); 
+  
+      this.current = {
+          createTime: 0,
+          type: this.type,
+          steps: 0,
+          lapTime: [],
+          completeTime: 0,
+          fortunateComponent: 0,
+          godPage: 0  
+      }
     }
   }
 
@@ -103,6 +107,7 @@ export class TimerComponent implements OnInit {
   }
 
   stopTimer() {
+    this.subscribed === false;
     this.myTimerSub.unsubscribe();
     const t = this.ticks
     if (t > 0 && !this.clicked) {
@@ -125,6 +130,7 @@ export class TimerComponent implements OnInit {
   }
 
   resetTimer() {
+    this.subscribed === false;
     this.myTimerSub.unsubscribe(); 
     this.ticks = 0;
     this.current.steps = 0;
@@ -174,7 +180,9 @@ export class TimerComponent implements OnInit {
     });
   }
 
-  ngOnDestroy() {    
-    this.myTimerSub.unsubscribe();    
+  ngOnDestroy() {
+    if(this.myTimerSub){
+      this.myTimerSub.unsubscribe(); 
+    }   
   }
 }

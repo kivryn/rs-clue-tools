@@ -1,4 +1,13 @@
 <div class="fixed-bg">
+<mat-toolbar class="header mul-bold" color="accent" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="2vw">
+    <div class="pointer" [routerLink]="['/']" fxLayout="row" fxLayoutAlign="flex-start center" fxLayoutGap="2vw">
+    <img src="assets/images/map-icon.gif" class="icon"><span class="shrink">RS Clue Tools</span>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="center space-around">
+        <div [routerLink]="['/co-ords']" class="header-icon" fxLayout="column" fxLayoutAlign="center center"><mat-icon>my_location</mat-icon><span class="shrink">CO-ORDS</span></div>
+        <div [routerLink]="['/timer']" class="header-icon" fxLayout="column" fxLayoutAlign="center center"><mat-icon>timer</mat-icon><span class="shrink">TIMER</span></div>
+    </div>
+</mat-toolbar>
 <router-outlet></router-outlet>
 
 </div>

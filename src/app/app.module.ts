@@ -14,6 +14,12 @@ import { DexieComponent } from './components/dexie.component';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireModule } from 'angularfire2';
 import { environment } from '../environments/environment';
+import { CoordComponent } from './components/coord.component';
+import { CoordModalComponent } from './components/coord-modal.component';
+import { appDecimalDirective } from './directives/app.decimaldirective';
+
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,7 +27,10 @@ import { environment } from '../environments/environment';
     WelcomeComponent,
     TimerComponent,
     MinuteSecondsPipe,
-    DexieComponent
+    DexieComponent,
+    CoordComponent,
+    CoordModalComponent,
+    appDecimalDirective
   ],
   imports: [
     BrowserModule,
@@ -30,9 +39,12 @@ import { environment } from '../environments/environment';
     MaterialModule,
     FlexLayoutModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [ DBService ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [CoordModalComponent]
 })
 export class AppModule { }

@@ -31,6 +31,20 @@ export class FirestoreService {
     return this.fs.collection('completeTimes', ref => ref.where('type', '==', type).orderBy('createTime')).snapshotChanges();
   }
 
+  getCoords(type) { 
+    return this.fs.collection('coords', ref => ref.where('type', '==', type).orderBy('a')).snapshotChanges();
+  }
+
+  getUntypedCoords() { 
+    return this.fs.collection('coords', ref => ref.where('type', '==', '').orderBy('a')).snapshotChanges();
+  }
+
+  updateCoord(id, data) {
+    return this.fs.collection('coords')
+    .doc(id)
+    .update(data);
+  }
+
   updateFortunate(id, data) {
     return this.fs.collection('completeTimes')
     .doc(id)

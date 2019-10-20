@@ -1,0 +1,58 @@
+<div>
+    <mat-card class="form">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" fxLayout="row column" fxLayoutGap="3vw">
+            <h2 class="center mul-bold">{{pagetitle}}</h2>
+            <mat-form-field class="full-width">
+                        <mat-label>Clue Type</mat-label>
+                       <mat-select formControlName="type">
+                                   <mat-option value="Medium">Medium</mat-option>
+                                   <mat-option value="Hard">Hard</mat-option>
+                           </mat-select>
+                           <mat-hint *ngIf="form.touched && !!f.type.errors?.required">Please input a clue type</mat-hint>
+                       </mat-form-field>
+            <div>
+            <mat-form-field class="short">
+                    <input matInput formControlName="a"> 
+            </mat-form-field>
+            <mat-button-toggle-group formControlName="b"> 
+                    <mat-button-toggle value="N" class="button" aria-label="Buy">N</mat-button-toggle>
+                    <mat-button-toggle value="S" class="button" aria-label="Sell">S</mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+        <div>
+            <mat-form-field class="short">
+                        <input matInput formControlName="c"> 
+                </mat-form-field>
+            <mat-button-toggle-group formControlName="d"> 
+                    <mat-button-toggle value="E" class="button" aria-label="Buy">E</mat-button-toggle>
+                    <mat-button-toggle value="W" class="button" aria-label="Sell">W</mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+
+        <div class="full-width">
+            <mat-form-field class="full-width">
+                        <input matInput placeholder="Teleport Hint" formControlName="teleport">
+                        <mat-hint *ngIf="form.touched && !!f.teleport.errors?.required">Please input a Teleport Hint</mat-hint>
+            </mat-form-field></div>
+            <div class="full-width">
+            <mat-form-field class="full-width">
+        <mat-label>Challenge Option</mat-label>
+        <mat-select formControlName="challenge">
+                <mat-option value="--">--</mat-option>
+                <mat-option value="Sara Wiz">Sara Wiz</mat-option>
+                <mat-option value="Zammy Wiz">Zammy Wiz</mat-option>
+        </mat-select>
+        <mat-hint *ngIf="form.touched && !!f.challenge.errors?.required">Please input a challenge option</mat-hint>
+        </mat-form-field></div>
+
+            <mat-form-field class="full-width">
+                    <input matInput placeholder="Description" formControlName="description">
+                    <mat-hint *ngIf="form.touched && !!f.description.errors?.required">Please input a Description</mat-hint>
+           </mat-form-field>
+           <div  class="full-width" fxLayout="row" fxLayoutAlign="space-around">
+                        <button mat-raised-button class="submit-button" color="warn" (click)="cancel()">Cancel</button>
+                        <button mat-raised-button class="submit-button" color="accent" button type="submit" [disabled]="!!form.invalid">Save Co-ord</button>
+           </div>
+        </form>
+    </mat-card>
+</div>

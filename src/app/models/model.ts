@@ -8,3 +8,21 @@ export interface CompleteTime {
     fortunateComponent?: number;
     godPage?: number;
 }
+
+export interface Coord {
+    id?: string;
+    a: string;
+    b: string;
+    c: string;
+    d: string;
+    type: string;
+    teleport:string;
+    challenge: string;
+    description: string;
+    w?: string;
+}
+
+export interface DialogData{
+    title: string;
+    record: any;
+}

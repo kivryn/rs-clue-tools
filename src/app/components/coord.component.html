@@ -1,0 +1,28 @@
+<div class="main-area" fxLayout="column" fxLayoutAlign="flex-start center" fxLayoutGap="4vw" >
+    <mat-card fxLayout="column" fxLayoutAlign="flex-start center" fxLayoutGap="4vw" class="center-card">
+    <div><mat-button-toggle-group class="mul-bold" (click)="changeType()" [(value)]="type" #group="matButtonToggleGroup">
+            <mat-button-toggle value="Easy">Easy</mat-button-toggle>
+            <mat-button-toggle value="Medium">Medium</mat-button-toggle>
+            <mat-button-toggle value="Hard">Hard</mat-button-toggle>
+            <mat-button-toggle value="Elite">Elite</mat-button-toggle>
+            <mat-button-toggle value="Master">Master</mat-button-toggle>
+    </mat-button-toggle-group></div>
+    <div class="full-width">
+        <mat-form-field class="full-width">
+        <input matInput class="mul-bold large" (keyup)="filtered($event)" id="filter" name="filter" placeholder="filter first coord">
+        </mat-form-field>
+    </div>
+    <div>
+        <table class="pad">
+    <tr class="mul-bold" *ngFor="let r of records; let i = index" fxLayout="row" fxLayoutAlign="stretch stretch" >
+        <td class="line coord" fxLayout="row" fxLayoutAlign="center center">{{r.a}}{{r.b}} {{r.c}}{{r.d}}</td>
+        <td class="line line2" fxLayout="row" fxLayoutAlign="center center">{{r.type}}</td>
+        <td class="line line3" fxLayout="row" fxLayoutAlign="center center">{{r.challenge}}</td>
+        <td class="line line2" fxLayout="row" fxLayoutAlign="center center">{{r.teleport}}</td>
+        <td class="line line4" fxLayout="row" fxLayoutAlign="center center">{{r.description}}</td>
+        <td class="butn2" fxLayout="row" fxLayoutAlign="center center" (click)="openDialog(r)"><mat-icon >edit</mat-icon></td>
+    </tr>
+</table>
+    </div>
+    </mat-card>
+</div>
