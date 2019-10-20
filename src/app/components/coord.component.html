@@ -11,6 +11,7 @@
         <mat-form-field class="full-width">
         <input matInput class="mul-bold large" (keyup)="filtered($event)" id="filter" name="filter" placeholder="filter first coord">
         </mat-form-field>
+        <button mat-raised-button class="submit-button" color="accent" (click)="clearFilter()">Clear Filter</button>
     </div>
     <div>
         <table class="pad">

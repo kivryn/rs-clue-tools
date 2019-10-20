@@ -21,16 +21,23 @@ export class CoordComponent implements OnInit {
               public dialog: MatDialog) { }
 
   ngOnInit() {
-    this.getRecords();
-    this.getUntypedRecords();
+    this.changeType();
   }
   
-  changeType(){
-    this.getRecords();
-    this.getUntypedRecords();
+  changeType() {
+    this.records = [];
+    this.records2= [];
+    this.savedRecords = [];
+    this.getRecords()
+    .then(() => this.getUntypedRecords())
+    .then(() => {
+      this.savedRecords = this.records;
+      console.log('savedRecords', this.savedRecords);
+    });
   }
 
   getRecords() {
+    return new Promise((resolve, reject) => {
     this.db.getCoords(this.type).subscribe(r => {
       this.records = r.map(item => {
         return {
@@ -38,11 +45,13 @@ export class CoordComponent implements OnInit {
           ...item.payload.doc.data()
         } as Coord
       })
-      console.log(this.records);
+      resolve();
+    });
     });
   }
 
-  getUntypedRecords() {
+  getUntypedRecords = async () => {
+    return new Promise((resolve, reject) => {
     this.db.getUntypedCoords().subscribe(r => {
       this.records2 = r.map(item => {
         return {
@@ -54,8 +63,8 @@ export class CoordComponent implements OnInit {
       this.records = this.records.sort((a,b) => {
         return a.a >b.a?1:a.a <b.a?-1:0
        });
-       this.savedRecords = [...this.records];
-      console.log(this.records2);
+      resolve();
+    });
     });
   }
   
@@ -77,9 +86,12 @@ export class CoordComponent implements OnInit {
   }
 
   filtered(e) {
-    console.log(this.savedRecords);
-    console.log(e.target.value);
     this.records = this.savedRecords.filter(el => el.a.toString().startsWith(e.target.value));
+    console.log(this.records);
+  }
+
+  clearFilter() {
+    this.records = this.savedRecords;
   }
 
 }
