@@ -36,6 +36,7 @@ export class CoordComponent implements OnInit {
     .then(() => {
       this.savedRecords = this.records;
       console.log('savedRecords', this.savedRecords);
+      this.filtered(this.filterInput.nativeElement.value);
     });
   }
 
@@ -84,6 +85,7 @@ export class CoordComponent implements OnInit {
       if (result !== undefined) { 
           this.db.updateCoord(result.record.id, result.record);
           console.log('Item was updated'); 
+          this.getRecords();
         }
     });
   }
