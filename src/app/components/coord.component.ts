@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FirestoreService } from '../services/firestore.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatInput } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { CoordModalComponent } from './coord-modal.component';
 import { Coord } from '../models/model';
@@ -10,23 +10,27 @@ import { Coord } from '../models/model';
   templateUrl: './coord.component.html',
   styleUrls: ['./coord.component.css']
 })
-export class CoordComponent implements OnInit {
+export class CoordComponent implements OnInit, AfterViewInit {
 
   type = 'Medium';
   records: Coord[] = []; // [{a:"00.00", b:"N", c:"00.00", d:"E", type:"Medium", teleport:"Nexus",
   records2: Coord[] = [];
   savedRecords: Coord[] = [];
-  @ViewChild('filter', {static:false}) 
-  filterInput: ElementRef;
+  @ViewChild('filter', {static:true}) 
+  filterInput: MatInput;
 
 
   constructor(private db: FirestoreService, private _snackBar: MatSnackBar,
               public dialog: MatDialog) { }
 
   ngOnInit() {
-    this.changeType();
+    
   }
   
+  ngAfterViewInit() {
+    this.changeType();
+  }
+
   changeType() {
     this.records = [];
     this.records2= [];
@@ -36,7 +40,7 @@ export class CoordComponent implements OnInit {
     .then(() => {
       this.savedRecords = this.records;
       console.log('savedRecords', this.savedRecords);
-      this.filtered(this.filterInput.nativeElement.value);
+      this.filtered(this.filterInput.value);
     });
   }
 
@@ -85,18 +89,18 @@ export class CoordComponent implements OnInit {
       if (result !== undefined) { 
           this.db.updateCoord(result.record.id, result.record);
           console.log('Item was updated'); 
-          this.getRecords();
+          this.changeType();
         }
     });
   }
 
   filtered(e) {
-    this.records = this.savedRecords.filter(el => el.a.toString().startsWith(e.target.value));
+    this.records = this.savedRecords.filter(el => el.a.toString().startsWith(this.filterInput.value));
     console.log(this.records);
   }
 
   clearFilter() {
-    this.filterInput.nativeElement.value = '';
+    this.filterInput.value = '';
     this.records = this.savedRecords;
   }
 
