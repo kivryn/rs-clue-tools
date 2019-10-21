@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FirestoreService } from '../services/firestore.service';
 import { MatSnackBar } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,6 +16,9 @@ export class CoordComponent implements OnInit {
   records: Coord[] = []; // [{a:"00.00", b:"N", c:"00.00", d:"E", type:"Medium", teleport:"Nexus",
   records2: Coord[] = [];
   savedRecords: Coord[] = [];
+  @ViewChild('filter', {static:false}) 
+  filterInput: ElementRef;
+
 
   constructor(private db: FirestoreService, private _snackBar: MatSnackBar,
               public dialog: MatDialog) { }
@@ -91,6 +94,7 @@ export class CoordComponent implements OnInit {
   }
 
   clearFilter() {
+    this.filterInput.nativeElement.value = '';
     this.records = this.savedRecords;
   }
 

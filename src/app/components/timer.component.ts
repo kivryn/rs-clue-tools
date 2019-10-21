@@ -98,6 +98,8 @@ export class TimerComponent implements OnInit {
           fortunateComponent: 0,
           godPage: 0  
       }
+    } else {
+      console.log("already subscribed");
     }
   }
 
@@ -107,7 +109,7 @@ export class TimerComponent implements OnInit {
   }
 
   stopTimer() {
-    this.subscribed === false;
+    this.subscribed = false;
     this.myTimerSub.unsubscribe();
     const t = this.ticks
     if (t > 0 && !this.clicked) {
@@ -130,7 +132,7 @@ export class TimerComponent implements OnInit {
   }
 
   resetTimer() {
-    this.subscribed === false;
+    this.subscribed = false;
     this.myTimerSub.unsubscribe(); 
     this.ticks = 0;
     this.current.steps = 0;
