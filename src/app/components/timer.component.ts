@@ -17,10 +17,18 @@ export class TimerComponent implements OnInit {
   ticks = 0;
   type = 'Medium';
   clicked = false;
+  count = 0;
   average = 0;
+  minTime = 0;
+  maxTime = 0;
   averageSteps = 0;
+  minSteps = 0;
+  maxSteps = 0;
+  averageStepTime = 0;
   cluesph = 0;
-  averagePagesPerHour = 0;
+  averageFortsPerClue = 0;
+  averageMastersPerClue = 0;
+  averageMastersPerHour = 0;
   averageFortsPerHour = 0;
   current:CompleteTime = {
       createTime: 0,
@@ -29,7 +37,8 @@ export class TimerComponent implements OnInit {
       lapTime: [],
       completeTime: 0,
       fortunateComponent: 0,
-      godPage: 0      
+      godPage: 0,
+      masterClue: 0     
   }
   records:CompleteTime[] = []; 
 
@@ -59,22 +68,31 @@ export class TimerComponent implements OnInit {
 
   calculateAverage() {
     this.average = 0;
+    this.minTime = this.records[0].completeTime;
     this.averageSteps = 0;
-    let cumulative = 0, cumulFort = 0, cumulPage = 0, cumulSteps = 0, count = 0, count2 = 0;
+    let cumulative = 0, cumulFort = 0, cumulMaster = 0, cumulSteps = 0, count2 = 0;
+    this.count = 0;
+    this.minSteps = this.records[0].steps;
     for (const t of this.records) {
-      count++;
+      this.count++;
       cumulative += t.completeTime;
       cumulFort += t.fortunateComponent;
-      cumulPage += t.godPage;
-      this.average = Math.floor(cumulative/ count);
+      cumulMaster += t.masterClue;
+      this.average = Math.floor(cumulative/ this.count);
+      this.minTime = (t.completeTime < this.minTime) ? t.completeTime : this.minTime;
+      this.maxTime = (t.completeTime > this.maxTime) ? t.completeTime : this.maxTime;
       this.cluesph = (60*60)/this.average;
-      this.averageFortsPerHour = cumulFort/count * this.cluesph;
-      this.averagePagesPerHour = cumulPage/count * this.cluesph;
+      this.averageFortsPerClue = cumulFort/this.count;
+      this.averageMastersPerClue = cumulMaster/(this.count-79);
+      this.averageFortsPerHour = cumulFort/this.count * this.cluesph;
+      this.averageMastersPerHour = cumulMaster/(this.count-79) * this.cluesph;
       
-      if(t.steps > 0) {
+      if (t.steps > 0) {
         count2++;
         cumulSteps += t.steps;
-        this.averageSteps = Math.floor(cumulSteps/ count2);
+        this.minSteps = (t.steps < this.minSteps) ? t.steps : this.minSteps;
+        this.maxSteps = (t.steps > this.maxSteps) ? t.steps : this.maxSteps;
+        this.averageSteps = cumulSteps/ count2;
       }
     }
   }
@@ -163,21 +181,21 @@ export class TimerComponent implements OnInit {
     });
   }
 
-  minusPage(id, pages) {
-    if(pages > 0) {
-      this.db.updatePage(id, pages-1).then(()=>{
-        this.openSnackBar('God Page Count updated to: '+ (pages-1), 'OK');
+  minusMaster(id, master) {
+    if(master > 0) {
+      this.db.updateMaster(id, master-1).then(()=>{
+        this.openSnackBar('Master Clue Count updated to: '+ (master-1), 'OK');
         this.getRecords();
       });
     } else {
-      this.openSnackBar('God Page Count is already 0'!, 'OK')
+      this.openSnackBar('Master Clue Count is already 0'!, 'OK')
     }
   }
 
-  addPage(id, pages) {
-    console.log(pages+1);
-    this.db.updatePage(id, pages+1).then(()=>{
-      this.openSnackBar('God Page Count updated to: '+ (pages+1), 'OK');
+  addMaster(id, master) {
+    console.log(master+1);
+    this.db.updateMaster(id, master+1).then(()=>{
+      this.openSnackBar('Master Clue Count updated to: '+ (master+1), 'OK');
       this.getRecords();
     });
   }

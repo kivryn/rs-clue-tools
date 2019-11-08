@@ -60,4 +60,12 @@ export class FirestoreService {
       godPage: data
     });
   }
+
+  updateMaster(id, data) {
+    return this.fs.collection('completeTimes')
+    .doc(id)
+    .update({
+      masterClue: data
+    });
+  }
 }

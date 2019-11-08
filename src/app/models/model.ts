@@ -7,6 +7,7 @@ export interface CompleteTime {
     completeTime: number;
     fortunateComponent?: number;
     godPage?: number;
+    masterClue?: number;
 }
 
 export interface Coord {
