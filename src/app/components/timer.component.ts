@@ -114,7 +114,8 @@ export class TimerComponent implements OnInit {
           lapTime: [],
           completeTime: 0,
           fortunateComponent: 0,
-          godPage: 0  
+          godPage: 0,
+          masterClue: 0
       }
     } else {
       console.log("already subscribed");
