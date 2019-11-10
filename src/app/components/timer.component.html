@@ -19,6 +19,7 @@
     <mat-card class="center-card" fxLayout="column" fxLayoutAlign="flex-start center" fxLayoutGap="4vw">
             <div class="average">{{ average | minuteSeconds }}
                 <div class="inside mul-bold">Total Clues: {{ count | number : '1.0' }}</div>
+                <div class="inside mul-bold">Step Time Avg: {{ averageStepTime | minuteSeconds }}</div>
                 <div class="inside mul-bold">Average Steps: {{ averageSteps | number : '1.2-2' }}<br>
                 Min {{ this.minSteps }} | Max {{ this.maxSteps }}<br>
                 With Clue Totem Active</div>

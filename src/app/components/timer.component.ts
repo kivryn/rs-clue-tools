@@ -77,7 +77,7 @@ export class TimerComponent implements OnInit {
       this.count++;
       cumulative += t.completeTime;
       cumulFort += t.fortunateComponent;
-      cumulMaster += t.masterClue;
+      if (t.masterClue) cumulMaster += t.masterClue;
       this.average = Math.floor(cumulative/ this.count);
       this.minTime = (t.completeTime < this.minTime) ? t.completeTime : this.minTime;
       this.maxTime = (t.completeTime > this.maxTime) ? t.completeTime : this.maxTime;
@@ -95,6 +95,7 @@ export class TimerComponent implements OnInit {
         this.averageSteps = cumulSteps/ count2;
       }
     }
+    this.averageStepTime = Math.floor(cumulative / cumulSteps);
   }
 
   startTimer() {
